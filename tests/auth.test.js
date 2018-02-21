@@ -25,15 +25,14 @@ describe('Client', function() {
             code_challenge: uuid()
         });
 
-        var response;
+        var res;
         try {
             var agent = request.agent();
-            assert.doesNotThrow(() => response = await agent.get(url));
+            res = await agent.get(url);
         } catch(err) {
-            
             console.error(err.message);
             console.error(err.stack);
-
+            assert.equal(null, err, 'expected "get"ing the auth url to not throw an error, but it did.');
         }
     });
 
