@@ -1,5 +1,6 @@
+/* global describe it */
 const Issuer = require('openid-client').Issuer;
-const util = require('util');
+const assert = require('assert');
 const uuid = require('uuid');
 // const base64url = require('base64url');
 // const crypto = require('crypto');
@@ -8,9 +9,9 @@ const request = require('superagent');
 
 describe('Client', function() {
 
-    it('should successfully get issuer from the discovery document', async function() {
-
-        var issuer = await Issuer.discover('http://localhost:3000');
+    it('should successfully get issuer from the discovery document and open authorization url', async function() {
+        this.timeout(10000);
+        var issuer = await Issuer.discover('http://localhost');
 
         const client = new issuer.Client({
             client_id: 'myapp',
@@ -23,16 +24,17 @@ describe('Client', function() {
             state: uuid(),
             code_challenge: uuid()
         });
-        console.log(url);
 
+        var response;
         try {
-            var res = await request.agent().get(url);
+            var agent = request.agent();
+            assert.doesNotThrow(() => response = await agent.get(url));
         } catch(err) {
+            
             console.error(err.message);
             console.error(err.stack);
-        }
 
-        console.log(res.text);
+        }
     });
 
 });

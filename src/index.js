@@ -1,30 +1,36 @@
-const process = require('process');
 const express = require('express');
 const Provider = require('oidc-provider');
 const morgan = require('morgan');
-const clients = require('./clients');
+const logger = require('./logger');
+// const clients = require('./clients');
 const users = require('./users');
+const MongoAdapter = require('./adapters/MongoAdapter');
 
-const MYAPP_API_SCOPE = 'myapp-api'
 const ROOT_URL = '/';
 
-// process.on('unhandledRejection', error => {
-//     console.log('unhandledRejection', error.message);
-// });
+
+//const configuration = { features: { pkce: { forcedForNative: true } } };
+process.on('unhandledRejection', error => {
+    logger.error(error);
+});
 
 const app = express();
 
-const oidc = new Provider('http://localhost:3000', {
+const oidc = new Provider('http://localhost', {
     claims: {
         email: ['email', 'email_verified'],
         phone: ['phone_number', 'phone_number_verified'],
         profile: ['family_name', 'given_name', 'locale', 'profile']
     },
-    scopes: [MYAPP_API_SCOPE],
     findById: users.findById
 });
-oidc.initialize({clients}).then(function () {
-    app.use(morgan('dev'));
-    app.use(ROOT_URL, oidc.callback);
-    app.listen(3000);
-});
+
+oidc.initialize({ adapter: MongoAdapter })
+    .then(function() {
+        app.use(morgan('dev'));
+        app.use(ROOT_URL, oidc.callback);
+        app.listen(80);
+    })
+    .catch(function(err) {
+        logger.error(err);
+    });
