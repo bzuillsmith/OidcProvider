@@ -7,6 +7,7 @@ const MongoAdapter = require('./adapters/MongoAdapter');
 const nunjucks = require('nunjucks');
 const querystring = require('querystring');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const ROOT_URL = '/connect';
 
@@ -54,11 +55,8 @@ oidc.initialize({ adapter: MongoAdapter })
 
         app.use(morgan('dev'));
         app.use(ROOT_URL, oidc.callback);
-
-        app.param('grant', function(req, res, next, grant){
-            console.log(grant);
-            next();
-        });
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: false }));
 
         app.get('/interaction/:grant', async (req, res, next) => {
             try{

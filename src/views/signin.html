@@ -1,10 +1,3 @@
-{% macro field(name, value='', type='text') %}
-<div class="field">
-  <input type="{{ type }}" name="{{ name }}"
-         value="{{ value | escape }}" />
-</div>
-{% endmacro %}
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,13 +5,19 @@
     </head>
     <body>
         <h1>{{title}}</h1>
-        <form action="/interaction/TODO/login"></form>
-        {{ field('email') }}
-        {{ field('password', type='password') }}
+        <form action="/interaction/{{details.uuid}}/login" method="post">
+            <input type="hidden" name="uuid" value="{{ details.uuid }}"/>
+            <input required type="text" name="login" placeholder="Email">
+            <input required type="password" name="password" placeholder="Password">
+
+            <label><input type="checkbox" name="remember" value="yes" checked="yes">Stay signed in</label>
+
+            <button type="submit">Sign-in</button>
+        </form>
         <h2>Debug:</h2>
         <h3>Session object</h3>
-        <p>{{debug}}</p>
+        <p>{{debug | safe}}</p>
         <h3>interaction object in session</h3>
-        <p>{{interaction}}</p>
+        <p>{{interaction | safe }}</p>
     </body>
 </html>
