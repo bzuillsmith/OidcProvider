@@ -1,4 +1,4 @@
-exports.findById = findById;
+exports.findByEmail = findByEmail;
 
 const users = {
     '12345abcdef': {
@@ -15,11 +15,17 @@ const users = {
     }
 };
 
-async function findById(ctx, id) {
-    var user = users[id];
-
+async function findByEmail(email) {
+    var theUser = null;
+    for(var user of users) {
+        if(user.email === email) {
+            theUser = user;
+            break;
+        }
+    }
+    
     return {
-        accountId: id,
+        accountId: theUser.id,
         async claims() { return { sub: user.id }; },
     };
 }

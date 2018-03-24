@@ -25,10 +25,10 @@ describe('Client', function() {
             code_challenge: uuid()
         });
 
-        var res;
+        //var res;
         try {
             var agent = request.agent();
-            res = await agent.get(url);
+            await agent.get(url);
         } catch(err) {
             console.error(err.message);
             console.error(err.stack);
