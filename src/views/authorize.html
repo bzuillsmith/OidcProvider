@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +7,10 @@
     <title>{{title}}</title>
 </head>
 <body>
-    <button>Authorize</button>
+    <form autocomplete="off" action="/interaction/{{details.uuid}}/confirm" method="post">
+        <input type="hidden" name="uuid" value="{{details.uuid}}"/>
+        <button autofocus type="submit" class="login login-submit">Authorize</button>
+    </form>
     <h3>Session object</h3>
     <p>{{debug | safe}}</p>
     <h3>interaction object in session</h3>

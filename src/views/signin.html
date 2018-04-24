@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>{{title}}</title>
-    </head>
-    <body>
-        <h1>{{title}}</h1>
-        <form action="/interaction/{{details.uuid}}/login" method="post">
-            <input type="hidden" name="uuid" value="{{ details.uuid }}"/>
-            <input required type="text" name="login" placeholder="Email">
-            <input required type="password" name="password" placeholder="Password">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    {% if errorMessage %}
+    <p>{{ errorMessage }}</p>
+    {% endif %}
+    <form action="/interaction/{{details.uuid}}/login" method="post">
+        <input type="hidden" name="uuid" value="{{ details.uuid }}"/>
+        <input required type="text" name="login" placeholder="Email" value="{{ email }}">
+        <input required type="password" name="password" placeholder="Password">
 
-            <label><input type="checkbox" name="remember" value="yes" checked="yes">Stay signed in</label>
+        <label><input type="checkbox" name="remember" value="yes" checked="yes">Stay signed in</label>
 
-            <button type="submit">Sign-in</button>
-        </form>
-        <h2>Debug:</h2>
-        <h3>Session object</h3>
-        <p>{{debug | safe}}</p>
-        <h3>interaction object in session</h3>
-        <p>{{interaction | safe }}</p>
-    </body>
+        <button type="submit">Sign-in</button>
+    </form>
+    <h2>Debug:</h2>
+    <h3>Session object</h3>
+    <p>{{debug | safe}}</p>
+    <h3>interaction object in session</h3>
+    <p>{{interaction | safe }}</p>
+</body>
 </html>
